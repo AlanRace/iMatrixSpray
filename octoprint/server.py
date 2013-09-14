@@ -238,36 +238,63 @@ def printerSpray():
 		spray_solution = request.values["solution"]
 		printer.command(";Solution: " + spray_solution)
 		
-
-
 	filename = gcodeManager.getAbsolutePath("immediate.gcode", mustExist=False)
 	printer.command(";" + filename)
+	
 	file = open(filename, "w")
 	file.write( ";Spray file generated on the fly\n")
 
-	home_x = 0
-	home_y = 0
-	home_z = 0
-	spray_offset = 0
-	spray_x1 = -10
-	spray_x2 = 10
-	spray_y1 = -10
-	spray_y2 = 10
+	# position constants
+	sp_home_x = 0
+	sp_home_y = 0
+	sp_home_z = 0
+	sp_offset = 0
+	sp_x1 = -10
+	sp_x2 = 10
+	sp_y1 = -10
+	sp_y2 = 10
+	sp_wash_x = 0
+	sp_wash_y = -110
+	sp_wash_z = -50
+	# wash position top, use to approach
+	sp_wash_u = -30
 
+	# commands
+	sc_valve_wash = "G1 V2\n"
+	sc_valve_spray = "G1 V3\n"
+	sc_valve_waste = "G1 V0\n"
+	sc_air_on = "M106\n"
+	sc_air_off = "M106 S0\n"
+	
+	# washing tip
+	# a go to wash position
+	sc_wash = "G1 X%f" % sp_wash_x + " Y%f"  % sp_wash_y + " Z%f" % sp_wash_u + " F200\n"
+	# lower head
+	sc_wash += "G1 Z%f" % sp_home_z  + " F200\n"
+	# spray rest to waste
+	sc_wash += sc_air_on
+	sc_wash += sc_valve_waste + "G4 S1\nG1 P0\n"
+	# clean syringe with wash solution
+	sc_wash += sc_valve_wash + "G4 S1\nG1 P10\n"
+	sc_wash += sc_valve_waste + "G4 S1\nG1 P0\n"
+	# clean spray with wash solution
+	sc_wash += sc_valve_wash + "G4 S1\nG1 P10 F200\n"
+	sc_wash += sc_valve_spray + "G4 S1\nG1 P0 F10\n"
+	# drip wash solution from spray
+	sc_wash += sc_air_off
+	sc_wash += sc_valve_wash + "G4 S1\nG1 P10 F200\n"
+	sc_wash += sc_valve_spray + "G4 S1\nG1 P0 F10\n"
+	# dry spray
+	sc_wash += sc_air_on + "G4 S2\nG4 S2\nG4 S2\nG4 S2\n" + sc_air_off
 
+	# no do the wash
+	file.write(sc_wash)
 
 	file.close()
 	printer.selectFile(filename, False, True)
 
 	return jsonify(SUCCESS)
 
-	#distance = request.values["distance"]
-	#hight = request.values["hight"]
-	#speed = request.values["speed"]
-	#flow = request.values["flow"]
-	#cycles = request.values["cycles"]
-	#delay = request.values["delay"]
-	
 @app.route(BASEURL + "control/job", methods=["POST"])
 @login_required
 def printJobControl():
