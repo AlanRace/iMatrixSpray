@@ -534,7 +534,8 @@ function ControlViewModel(loginStateViewModel, settingsViewModel) {
 	self.sprayFlow = ko.observable(10);
 	self.sprayCycles = ko.observable(1);
 	self.sprayDelay = ko.observable(0);
-	
+	self.spraySolution = ko.observable(0);
+
 
     self.extrusionAmount = ko.observable(undefined);
     self.controls = ko.observableArray([]);
@@ -625,7 +626,7 @@ function ControlViewModel(loginStateViewModel, settingsViewModel) {
             url: AJAX_BASEURL + "control/spray",
             type: "POST",
             dataType: "json",
-            data: { distance: distance, hight: hight, speed: speed, flow: flow, cycles: cycles, delay: solution }
+            data: { distance: distance, hight: hight, speed: speed, flow: flow, cycles: cycles, delay: delay, solution: solution }
         })		
     }
 

@@ -210,36 +210,55 @@ def printerSpray():
 		# do not jog when a print job is running or we don't have a connection
 		return jsonify(SUCCESS)
 
-	for i in range(10):
-		printer.command("G1 X100")
-		while printer.isPrinting():
-		    #do nothing
-                    i=i
-                        
 	if "distance" in request.values.keys():
-		distance = request.values["distance"]
-		printer.command(";Distance :" + distance)
+		spray_distance = request.values["distance"]
+		printer.command(";Distance :" + spray_distance)
 		
 	if "hight" in request.values.keys():
-		hight = request.values["hight"]
-		printer.command(";Hight: " + hight)	
+		spray_hight = request.values["hight"]
+		printer.command(";Hight: " + spray_hight)	
 
 	if "speed" in request.values.keys():
-		speed = request.values["speed"]
-		printer.command(";Speed: " + speed)	
+		spray_speed = request.values["speed"]
+		printer.command(";Speed: " + spray_speed)	
 
 	if "flow" in request.values.keys():
-		flow = request.values["flow"]
-		printer.command(";Flow: " + flow)	
+		spray_flow = request.values["flow"]
+		printer.command(";Flow: " + spray_flow)	
 
 	if "cycles" in request.values.keys():
-		cycles = request.values["cycles"]
-		printer.command(";Cycles: " + cycles)	
+		spray_cycles = request.values["cycles"]
+		printer.command(";Cycles: " + spray_cycles)	
 
 	if "delay" in request.values.keys():
-		delay = request.values["delay"]
-		printer.command(";Delay: " + delay)		
+		spray_delay = request.values["delay"]
+		printer.command(";Delay: " + spray_delay)
 		
+	if "delay" in request.values.keys():
+		spray_solution = request.values["solution"]
+		printer.command(";Solution: " + spray_solution)
+		
+
+
+	filename = gcodeManager.getAbsolutePath("immediate.gcode", mustExist=False)
+	printer.command(";" + filename)
+	file = open(filename, "w")
+	file.write( ";Spray file generated on the fly\n")
+
+	home_x = 0
+	home_y = 0
+	home_z = 0
+	spray_offset = 0
+	spray_x1 = -10
+	spray_x2 = 10
+	spray_y1 = -10
+	spray_y2 = 10
+
+
+
+	file.close()
+	printer.selectFile(filename, False, True)
+
 	return jsonify(SUCCESS)
 
 	#distance = request.values["distance"]
