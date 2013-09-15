@@ -334,8 +334,8 @@
 											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M18'}) }"><i class="icon-leaf"></i>&nbsp;Clean</button>
 										<div>
 											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M18'}) }"><i class="icon-repeat"></i>&nbsp;Prime</button>
-											<button class="btn control-box" data-bind="enable: isOperational() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M106'}) }"><i class="icon-resize-full"></i>&nbsp;Gas on</button>
-											<button class="btn control-box" data-bind="enable: isOperational() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M106 S0'}) }"><i class="icon-resize-small"></i>Gas off</button>
+											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M106'}) }"><i class="icon-resize-full"></i>&nbsp;Gas on</button>
+											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M106 S0'}) }"><i class="icon-resize-small"></i>&nbspGas off</button>
 										</div>
 									</div>
 								</div>
@@ -381,9 +381,9 @@
 										<label for="jog_solution">Liquid</label>
 										<div class="solution">
 											<div class="btn-group" data-toggle="buttons-radio" id="jog_solution">
-												<button type="button" class="btn active" data-solution="3" data-bind="enable: loginState.isUser()">A</button>
-												<button type="button" class="btn" data-solution="4" data-bind="enable: loginState.isUser()">B</button>
-												<button type="button" class="btn" data-solution="5" data-bind="enable: loginState.isUser()">C</button>
+												<button type="button" class="btn active" data-solution="3" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser()">A</button>
+												<button type="button" class="btn" data-solution="4" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser()">B</button>
+												<button type="button" class="btn" data-solution="5" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser()">C</button>
 											</div>
 										</div>
 									</div>
