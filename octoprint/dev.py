@@ -5,7 +5,7 @@ spray_min = "10"
 spray_flow = float(spray_min)/60.0
 spray_cycles = 1
 spray_delay = 0
-spray_solution = 1
+spray_solution = 4
 
 
 filename = "C:/Users/stoecma2/Desktop/test.gcode"
@@ -84,12 +84,12 @@ if 1:
 	sc_wash += sc_valve_wash + sc_aspirate.format(10)
 	sc_wash += sc_valve_waste + sc_empty
 	# clean spray with wash solution
-	sc_wash += sc_valve_wash + sc_aspirate.format(10)
-	sc_wash += sc_valve_spray + sc_speed.format(1) + sc_syringe_position.format(0)
+	sc_wash += sc_valve_wash + sc_aspirate.format(4)
+	sc_wash += sc_valve_spray + sc_speed.format(0.5) + sc_syringe_position.format(0)
 	# drip wash solution from spray
 	sc_wash += sc_air_off
-	sc_wash += sc_valve_wash + sc_aspirate.format(10)
-	sc_wash += sc_valve_spray + sc_speed.format(1) + sc_syringe_position.format(0)
+	sc_wash += sc_valve_wash + sc_aspirate.format(2)
+	sc_wash += sc_valve_spray + sc_speed.format(0.2) + sc_syringe_position.format(0)
 	# dry spray
 	sc_wash += sc_air_on + "G4 S2\nG4 S2\nG4 S2\nG4 S2\n" + sc_air_off
 
@@ -110,18 +110,23 @@ if 1:
 	spray_feed = spray_speed * 4
 	
 	#prime system
+	file.write(sc_go_to_wash)
 	file.write(sc_valve_pos.format(spray_solution))
 	file.write(sc_air_on)
 	# prime spray with spray solution
-	file.write(sc_aspirate.format(5))
-	file.write(sc_valve_spray + sc_speed.format(10) + sc_syringe_position.format(0))
+	file.write(sc_aspirate.format(2))
+	file.write(sc_valve_spray + sc_speed.format(0.5) + sc_syringe_position.format(0))
 
 	#start loop
 	for n in range(spray_cycles):
 		#aspirate syringe
-		file.write(sc_valve_pos.format(spray_solution))
 		file.write(sc_syringe_absolute)
-		file.write(sc_aspirate.format(spray_syringe_travel))
+		file.write(sc_valve_pos.format(spray_solution))
+		file.write(sc_aspirate.format(spray_syringe_travel + 4))
+		file.write(sc_valve_spray)		
+		file.write(sc_speed.format(0.5) + sc_syringe_position.format(spray_syringe_travel))
+		file.write(sc_move_fast_z.format(sp_wash_u))
+
 		#move to start
 		y_offset = spray_distance / spray_lines * n + sp_y1
 		file.write(sc_move_fast.format(sp_x1, y_offset))
@@ -144,8 +149,7 @@ if 1:
 			y_offset += spray_distance
 
 		#move to wash
-		y_offset -= spray_distance
-		file.write(sc_move_fast.format(sp_x1, y_offset))
+		file.write("G1 Y{} Z{} F200".format(sp_y1, sp_wash_u))
 		file.write(sc_go_to_wash)
 
 		#empty syringe
