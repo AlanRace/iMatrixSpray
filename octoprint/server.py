@@ -322,8 +322,12 @@ def printerSpray():
 	sc_wash += sc_valve_spray + sc_speed.format(0.5) + sc_syringe_position.format(0)
 	# drip wash solution from spray
 	sc_wash += sc_air_off
-	sc_wash += sc_valve_wash + sc_aspirate.format(2)
+	sc_wash += sc_valve_wash + sc_aspirate.format(3)
 	sc_wash += sc_valve_spray + sc_speed.format(0.2) + sc_syringe_position.format(0)
+	sc_wash += sc_syringe_position.format(1)
+	sc_wash += sc_air_on
+	sc_wash += sc_syringe_position.format(0)
+
 	# dry spray
 	sc_wash += sc_air_on + "G4 S2\nG4 S2\nG4 S2\nG4 S2\n" + sc_air_off
 
@@ -402,8 +406,8 @@ def printerSpray():
 
 		#clean syringe
 
-		file.write(sc_air_off)
 		if n != int(spray_cycles):
+			file.write(sc_air_off)
 			file.write(sc_wait.format(spray_delay))
 
 	# now do the wash

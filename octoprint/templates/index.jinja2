@@ -325,15 +325,15 @@
 									<h1>Control</h1>
                                     <div style="text-align:left; width:160px;">
 										<div>
-											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'commands',commands:['G28 V','G28XYZP']}) }"><i class="icon-home"></i>&nbsp;Init</button>
+											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'commands',command:'G28}) }"><i class="icon-home"></i>&nbsp;Init</button>
 										</div>
 										<div>
 											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M18'}) }"><i class="icon-off"></i>&nbsp;Motors off</button>
 										</div>
-											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M18'}) }"><i class="icon-chevron-down"></i>&nbsp;Purge</button>
-											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M18'}) }"><i class="icon-leaf"></i>&nbsp;Clean</button>
+											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sprayPurge() }"><i class="icon-chevron-down"></i>&nbsp;Purge</button>
+											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sprayClean() }"><i class="icon-leaf"></i>&nbsp;Clean</button>
 										<div>
-											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M18'}) }"><i class="icon-repeat"></i>&nbsp;Prime</button>
+											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sprayPrime() }"><i class="icon-repeat"></i>&nbsp;Prime</button>
 											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M106'}) }"><i class="icon-resize-full"></i>&nbsp;Gas on</button>
 											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M106 S0'}) }"><i class="icon-resize-small"></i>&nbspGas off</button>
 										</div>
