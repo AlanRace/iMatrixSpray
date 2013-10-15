@@ -344,7 +344,7 @@
                             <div class="jog-panel" style="display: none;" data-bind="visible: loginState.isUser">
                                 <h1>Parameters</h1>
                                 <div style="text-align:left; width:160px;">
-									<label for="inputHight">Hight</label>
+									<label for="inputHight">Hight (max 80)</label>
 									<div class="input-append control-box" id="inputHight">
 										<input type="text" class="input-mini text-right" data-bind="value: sprayHight, enable: isOperational() && !isPrinting() && loginState.isUser(), attr: {placeholder: 10}">
                                         <span class="add-on">mm</span>
@@ -354,15 +354,15 @@
                                         <input type="text" class="input-mini text-right" data-bind="value: sprayDistance, enable: isOperational() && !isPrinting() && loginState.isUser(), attr: {placeholder: 10}">
                                         <span class="add-on">mm</span>
                                     </div>
-									<label for="inputSpeed">Speed</label>
+									<label for="inputSpeed">Speed (max 200)</label>
 									<div class="input-append control-box" id="inputSpeed">
                                         <input type="text" class="input-mini text-right" data-bind="value: spraySpeed, enable: isOperational() && !isPrinting() && loginState.isUser(), attr: {placeholder: 10}">
                                         <span class="add-on">mm/s</span>
                                     </div>
-									<label for="inputFlow">Flow</label>
+									<label for="inputFlow">Density (max 5)</label>
 									<div class="input-append control-box" id="inputFlow">
                                         <input type="text" class="input-mini text-right" data-bind="value: sprayFlow, enable: isOperational() && !isPrinting() && loginState.isUser(), attr: {placeholder: 10}">
-                                        <span class="add-on">uL/min</span>
+                                        <span class="add-on">uL/cm^2</span>
                                     </div>
 									<label for="inputCycles">Cycles</label>
                                     <input id="inputCycles" type="text" class="input-mini text-right" data-bind="value: sprayCycles, enable: isOperational() && !isPrinting() && loginState.isUser(), attr: {placeholder: 10}">

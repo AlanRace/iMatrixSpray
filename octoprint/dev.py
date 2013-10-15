@@ -1,10 +1,9 @@
-spray_distance = float("10")
-spray_hight = 50
-spray_speed = 10
-spray_min = "10"
-spray_flow = float(spray_min)/60.0
-spray_cycles = 1
-spray_delay = 0
+spray_distance = float("5")
+spray_hight = 60
+spray_speed = 180
+spray_flow = 1.3
+spray_cycles = 2
+spray_delay = 10
 spray_solution = 4
 
 
@@ -32,13 +31,15 @@ if 1:
 	sp_wash_u = -30.0
 
 	# commands
-	sc_valve_wash = "G1 V2\nG4 S1\n"
-	sc_valve_spray = "G1 V1\nG4 S1\n"
-	sc_valve_waste = "G1 V0\nG4 S1\n"
+	sc_valve_wash = "G1 V2 F200\nG4 S1\n"
+	sc_valve_spray = "G1 V1 F200\nG4 S1\n"
+	sc_valve_waste = "G1 V0 F200\nG4 S1\n"
 	#go to valve position % nr
-	sc_valve_pos = "G1 V{}\nG4 S1\n"
+	sc_valve_pos = "G1 V{} F200\nG4 S1\n"
 	sc_air_on = "M106\n"
 	sc_air_off = "M106 S0\n"
+	sc_init = "G28\n"
+	sc_motor_off = "M18\n"
 
 	# go to wash position
 	sc_go_to_wash = ";go to wash\nG1 X{} Y{} Z{} F200\nG1 Z{}\n".format (sp_wash_x, sp_wash_y, sp_wash_u, sp_wash_z)
@@ -56,7 +57,7 @@ if 1:
 	sc_empty = "G1 P0 F200\n"
 
 	# wait % seconds
-	sc_wait = "G4 {}\n"
+	sc_wait = "G4 S{}\n"
 
 	# set speed % speed
 	sc_speed = "G1 F{}\n"
@@ -72,6 +73,8 @@ if 1:
 
 	# spray fast % x, y, p, f
 	sc_spray = "G1 X{} Y{} P{} F{}\n"
+
+	sc_go_home = "G1 X0 Y0 Z0 F200\n"
 
 	# washing tip
 	# a go to wash position
@@ -95,19 +98,27 @@ if 1:
 
 	#coating starts
 	file.write(";start coating\n")
+	file.write(sc_init)
 
 	#syringe parameter in ul/mm
-	spray_syringe_volume_per_travel = 5
+	spray_syringe_volume_per_travel = 29
+	
+	#flow contains ul/cm^2
+	#densitity in ul/mm
+	spray_density = float(spray_flow)/100 * spray_distance
+
 	spray_lines = int((sp_y2 - sp_y1)/spray_distance)
-	spray_travel_distance =  spray_lines * (sp_x2 - sp_x1) + 2 * (sp_y2 - sp_y1)
+	spray_travel_distance =  spray_lines * (sp_x2 - sp_x1) + (sp_y2 - sp_y1)
 	spray_time = spray_travel_distance / spray_speed
-	spray_syringe_volume = spray_time * spray_flow
+
+	spray_syringe_volume = spray_travel_distance * spray_density
 	spray_syringe_travel = spray_syringe_volume / spray_syringe_volume_per_travel
-	spray_syringe_x = (sp_x2 - sp_x1) / spray_speed * spray_flow / spray_syringe_volume_per_travel * -1
-	spray_syringe_y = spray_distance / spray_speed * spray_flow / spray_syringe_volume_per_travel * -1
+
+	spray_syringe_x = (sp_x2 - sp_x1) * spray_density / spray_syringe_volume_per_travel * -1
+	spray_syringe_y = spray_distance * spray_density / spray_syringe_volume_per_travel * -1
 	
 	# this is an intrinsic factor, test
-	spray_feed = spray_speed * 4
+	spray_feed = spray_speed * 1.0
 	
 	#prime system
 	file.write(sc_go_to_wash)
@@ -120,9 +131,10 @@ if 1:
 	#start loop
 	for n in range(spray_cycles):
 		#aspirate syringe
+		file.write(sc_air_on)
 		file.write(sc_syringe_absolute)
 		file.write(sc_valve_pos.format(spray_solution))
-		file.write(sc_aspirate.format(spray_syringe_travel + 4))
+		file.write(sc_aspirate.format(spray_syringe_travel + 2))
 		file.write(sc_valve_spray)		
 		file.write(sc_speed.format(0.5) + sc_syringe_position.format(spray_syringe_travel))
 		file.write(sc_move_fast_z.format(sp_wash_u))
@@ -159,9 +171,15 @@ if 1:
 
 		#clean syringe
 
+		file.write(sc_air_off)
+		if n != int(spray_cycles):
+			file.write(sc_wait.format(spray_delay))
 
 	# now do the wash
 	file.write(sc_wash)
+	file.write(sc_go_home)
+	file.write(sc_motor_off)
+
 	###################section stop###################
 
 file.close()

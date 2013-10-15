@@ -528,13 +528,13 @@ function ControlViewModel(loginStateViewModel, settingsViewModel) {
     self.isReady = ko.observable(undefined);
     self.isLoading = ko.observable(undefined);
 	
-	self.sprayHight = ko.observable(20);
-	self.sprayDistance = ko.observable(10);
-	self.spraySpeed = ko.observable(10);
-	self.sprayFlow = ko.observable(10);
-	self.sprayCycles = ko.observable(1);
+	self.sprayHight = ko.observable(60);
+	self.sprayDistance = ko.observable(5);
+	self.spraySpeed = ko.observable(180);
+	self.sprayFlow = ko.observable(1);
+	self.sprayCycles = ko.observable(2);
 	self.sprayDelay = ko.observable(0);
-	self.spraySolution = ko.observable(0);
+	self.spraySolution = ko.observable(4);
 
 
     self.extrusionAmount = ko.observable(undefined);
