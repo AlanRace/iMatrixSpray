@@ -40,6 +40,93 @@ principals = Principal(app)
 admin_permission = Permission(RoleNeed("admin"))
 user_permission = Permission(RoleNeed("user"))
 
+
+# position constants
+sp_home_x = 0.0
+sp_home_y = 0.0
+sp_home_z = 0.0
+sp_offset = 0.0
+sp_x1 = -60.0
+sp_x2 = 60.0
+sp_y1 = -80.0
+sp_y2 = 80.0
+sp_top = 100.0
+sp_wash_x = 0.0
+sp_wash_y = -110.0
+sp_wash_z = -50.0
+# wash position top, use to approach
+sp_wash_u = -30.0
+
+# commands
+sc_valve_wash = "G1 V2 F200\nG4 S1\n"
+sc_valve_spray = "G1 V1 F200\nG4 S1\n"
+sc_valve_waste = "G1 V0 F200\nG4 S1\n"
+#go to valve position % nr
+sc_valve_pos = "G1 V{} F200\nG4 S1\n"
+sc_air_on = "M106\n"
+sc_air_off = "M106 S0\n"
+sc_init = "G28\n"
+sc_motor_off = "M18\n"
+
+# go to wash position
+sc_go_to_wash = ";go to wash\nG1 X{} Y{} Z{} F200\nG1 Z{}\n".format (sp_wash_x, sp_wash_y, sp_wash_u, sp_wash_z)
+
+# aspirate % position
+sc_aspirate = "G1 P{} F200\n"
+
+# set syringe to absolute mode
+sc_syringe_absolute= "M82\n"
+
+# set syringe to realtive mode
+sc_syringe_relative = "M83\n"
+
+# empty syringe
+sc_empty = "G1 P0 F200\n"
+
+# wait % seconds
+sc_wait = "G4 S{}\n"
+
+# set speed % speed
+sc_speed = "G1 F{}\n"
+
+# go to syringe position % position
+sc_syringe_position = "G1 P{}\n"
+
+# move fast % x, y position
+sc_move_fast = "G1 X{} Y{} F200\n"
+
+# move fast % z position
+sc_move_fast_z = "G1 Z{} F200\n"
+
+# spray fast % x, y, p, f
+sc_spray = "G1 X{} Y{} P{} F{}\n"
+
+sc_go_home = "G1 X0 Y0 Z0 F200\n"
+
+# washing tip
+# a go to wash position
+sc_wash = "; wash\n"
+sc_wash += sc_go_to_wash
+# spray rest to waste
+sc_wash += sc_air_on
+sc_wash += sc_valve_waste + sc_empty
+# clean syringe with wash solution
+sc_wash += sc_valve_wash + sc_aspirate.format(10)
+sc_wash += sc_valve_waste + sc_empty
+# clean spray with wash solution
+sc_wash += sc_valve_wash + sc_aspirate.format(4)
+sc_wash += sc_valve_spray + sc_speed.format(0.5) + sc_syringe_position.format(0)
+# drip wash solution from spray
+sc_wash += sc_air_off
+sc_wash += sc_valve_wash + sc_aspirate.format(3)
+sc_wash += sc_valve_spray + sc_speed.format(0.2) + sc_syringe_position.format(0)
+sc_wash += sc_syringe_position.format(1)
+sc_wash += sc_air_on
+sc_wash += sc_syringe_position.format(0)
+
+# dry spray
+sc_wash += sc_air_on + "G4 S2\nG4 S2\nG4 S2\nG4 S2\n" + sc_air_off
+
 #~~ Printer state
 
 class PrinterStateConnection(tornadio2.SocketConnection):
@@ -202,7 +289,37 @@ def printerCommand():
 		printer.commands(commandsToSend)
 
 	return jsonify(SUCCESS)
+
+
+@app.route(BASEURL + "control/clean", methods=["POST"])
+@login_required
+def printerClean():
+
+	commandsToSend = []
+	commandsToSend.append("G28")
+	commandsToSend.append(sc_wash.split("\n"))
+	printer.commands(commandsToSend)
+
+	return jsonify(SUCCESS)
 	
+
+@app.route(BASEURL + "control/purge", methods=["POST"])
+@login_required
+def printerPurge():
+
+	printer.command(sc_air_on)
+
+	return jsonify(SUCCESS)
+	
+@app.route(BASEURL + "control/prime", methods=["POST"])
+@login_required
+def printerPrime():
+
+	printer.command('G28')
+
+	return jsonify(SUCCESS)
+	
+
 @app.route(BASEURL + "control/spray", methods=["POST"])
 @login_required
 def printerSpray():
@@ -245,91 +362,6 @@ def printerSpray():
 	file.write( ";Spray file generated on the fly\n")
 
 	###################section start###################
-	# position constants
-	sp_home_x = 0.0
-	sp_home_y = 0.0
-	sp_home_z = 0.0
-	sp_offset = 0.0
-	sp_x1 = -60.0
-	sp_x2 = 60.0
-	sp_y1 = -80.0
-	sp_y2 = 80.0
-	sp_top = 100.0
-	sp_wash_x = 0.0
-	sp_wash_y = -110.0
-	sp_wash_z = -50.0
-	# wash position top, use to approach
-	sp_wash_u = -30.0
-
-	# commands
-	sc_valve_wash = "G1 V2 F200\nG4 S1\n"
-	sc_valve_spray = "G1 V1 F200\nG4 S1\n"
-	sc_valve_waste = "G1 V0 F200\nG4 S1\n"
-	#go to valve position % nr
-	sc_valve_pos = "G1 V{} F200\nG4 S1\n"
-	sc_air_on = "M106\n"
-	sc_air_off = "M106 S0\n"
-	sc_init = "G28\n"
-	sc_motor_off = "M18\n"
-
-	# go to wash position
-	sc_go_to_wash = ";go to wash\nG1 X{} Y{} Z{} F200\nG1 Z{}\n".format (sp_wash_x, sp_wash_y, sp_wash_u, sp_wash_z)
-
-	# aspirate % position
-	sc_aspirate = "G1 P{} F200\n"
-
-	# set syringe to absolute mode
-	sc_syringe_absolute= "M82\n"
-
-	# set syringe to realtive mode
-	sc_syringe_relative = "M83\n"
-
-	# empty syringe
-	sc_empty = "G1 P0 F200\n"
-
-	# wait % seconds
-	sc_wait = "G4 S{}\n"
-
-	# set speed % speed
-	sc_speed = "G1 F{}\n"
-
-	# go to syringe position % position
-	sc_syringe_position = "G1 P{}\n"
-
-	# move fast % x, y position
-	sc_move_fast = "G1 X{} Y{} F200\n"
-
-	# move fast % z position
-	sc_move_fast_z = "G1 Z{} F200\n"
-
-	# spray fast % x, y, p, f
-	sc_spray = "G1 X{} Y{} P{} F{}\n"
-
-	sc_go_home = "G1 X0 Y0 Z0 F200\n"
-
-	# washing tip
-	# a go to wash position
-	sc_wash = "; wash\n"
-	sc_wash += sc_go_to_wash
-	# spray rest to waste
-	sc_wash += sc_air_on
-	sc_wash += sc_valve_waste + sc_empty
-	# clean syringe with wash solution
-	sc_wash += sc_valve_wash + sc_aspirate.format(10)
-	sc_wash += sc_valve_waste + sc_empty
-	# clean spray with wash solution
-	sc_wash += sc_valve_wash + sc_aspirate.format(4)
-	sc_wash += sc_valve_spray + sc_speed.format(0.5) + sc_syringe_position.format(0)
-	# drip wash solution from spray
-	sc_wash += sc_air_off
-	sc_wash += sc_valve_wash + sc_aspirate.format(3)
-	sc_wash += sc_valve_spray + sc_speed.format(0.2) + sc_syringe_position.format(0)
-	sc_wash += sc_syringe_position.format(1)
-	sc_wash += sc_air_on
-	sc_wash += sc_syringe_position.format(0)
-
-	# dry spray
-	sc_wash += sc_air_on + "G4 S2\nG4 S2\nG4 S2\nG4 S2\n" + sc_air_off
 
 	#coating starts
 	file.write(";start coating\n")

@@ -325,7 +325,7 @@
 									<h1>Control</h1>
                                     <div style="text-align:left; width:160px;">
 										<div>
-											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'commands',command:'G28}) }"><i class="icon-home"></i>&nbsp;Init</button>
+											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'G28'}) }"><i class="icon-home"></i>&nbsp;Init</button>
 										</div>
 										<div>
 											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M18'}) }"><i class="icon-off"></i>&nbsp;Motors off</button>

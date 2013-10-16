@@ -612,6 +612,59 @@ function ControlViewModel(loginStateViewModel, settingsViewModel) {
             data: axis + "=" + ( distance * multiplier )
         })
     }
+
+    self.sprayClean = function () {
+        var distance = self.sprayDistance();
+        var hight = self.sprayHight();
+        var speed = self.spraySpeed();
+        var flow = self.sprayFlow();
+        var cycles = self.sprayCycles();
+        var delay = self.sprayDelay();
+        solution = $('#jog_solution button.active').data('solution');
+
+        $.ajax({
+            url: AJAX_BASEURL + "control/clean",
+            type: "POST",
+            dataType: "json",
+            data: { distance: distance, hight: hight, speed: speed, flow: flow, cycles: cycles, delay: delay, solution: solution }
+        })
+    }
+
+    self.sprayPurge = function () {
+        var distance = self.sprayDistance();
+        var hight = self.sprayHight();
+        var speed = self.spraySpeed();
+        var flow = self.sprayFlow();
+        var cycles = self.sprayCycles();
+        var delay = self.sprayDelay();
+        solution = $('#jog_solution button.active').data('solution');
+
+        $.ajax({
+            url: AJAX_BASEURL + "control/purge",
+            type: "POST",
+            dataType: "json",
+            data: { distance: distance, hight: hight, speed: speed, flow: flow, cycles: cycles, delay: delay, solution: solution }
+        })
+    }
+
+
+    self.sprayPrime = function () {
+        var distance = self.sprayDistance();
+        var hight = self.sprayHight();
+        var speed = self.spraySpeed();
+        var flow = self.sprayFlow();
+        var cycles = self.sprayCycles();
+        var delay = self.sprayDelay();
+        solution = $('#jog_solution button.active').data('solution');
+
+        $.ajax({
+            url: AJAX_BASEURL + "control/prime",
+            type: "POST",
+            dataType: "json",
+            data: { distance: distance, hight: hight, speed: speed, flow: flow, cycles: cycles, delay: delay, solution: solution }
+        })
+    }
+
 	
 	self.sprayRun = function() {
         var distance = self.sprayDistance();
