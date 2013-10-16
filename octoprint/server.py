@@ -103,30 +103,6 @@ sc_spray = "G1 X{} Y{} P{} F{}\n"
 
 sc_go_home = "G1 X0 Y0 Z0 F200\n"
 
-# washing tip
-# a go to wash position
-sc_wash = "; wash\n"
-sc_wash += sc_go_to_wash
-# spray rest to waste
-sc_wash += sc_air_on
-sc_wash += sc_valve_waste + sc_empty
-# clean syringe with wash solution
-sc_wash += sc_valve_wash + sc_aspirate.format(10)
-sc_wash += sc_valve_waste + sc_empty
-# clean spray with wash solution
-sc_wash += sc_valve_wash + sc_aspirate.format(4)
-sc_wash += sc_valve_spray + sc_speed.format(0.5) + sc_syringe_position.format(0)
-# drip wash solution from spray
-sc_wash += sc_air_off
-sc_wash += sc_valve_wash + sc_aspirate.format(3)
-sc_wash += sc_valve_spray + sc_speed.format(0.2) + sc_syringe_position.format(0)
-sc_wash += sc_syringe_position.format(1)
-sc_wash += sc_air_on
-sc_wash += sc_syringe_position.format(0)
-
-# dry spray
-sc_wash += sc_air_on + "G4 S2\nG4 S2\nG4 S2\nG4 S2\n" + sc_air_off
-
 #~~ Printer state
 
 class PrinterStateConnection(tornadio2.SocketConnection):
@@ -294,12 +270,12 @@ def printerCommand():
 @app.route(BASEURL + "control/clean", methods=["POST"])
 @login_required
 def printerClean():
-
-	commandsToSend = []
-	commandsToSend.append("G28")
-	commandsToSend.append(sc_wash.split("\n"))
-	printer.commands(commandsToSend)
-
+	
+	printer.command("G28")
+	filename = "/home/pi/OctoPrint/octoprint/methods/clean.gcode"
+	#printer.command(";" + filename)
+	printer.selectFile(filename, False, True)
+	
 	return jsonify(SUCCESS)
 	
 
@@ -307,7 +283,9 @@ def printerClean():
 @login_required
 def printerPurge():
 
-	printer.command(sc_air_on)
+	filename = "/home/pi/OctoPrint/octoprint/methods/purge.gcode"
+	#printer.command(";" + filename)
+	printer.selectFile(filename, False, True)
 
 	return jsonify(SUCCESS)
 	
@@ -315,7 +293,10 @@ def printerPurge():
 @login_required
 def printerPrime():
 
-	printer.command('G28')
+	filename = "/home/pi/OctoPrint/octoprint/methods/prime.gcode"
+	#printer.command(";" + filename)
+	printer.selectFile(filename, False, True)
+
 
 	return jsonify(SUCCESS)
 	
@@ -355,7 +336,8 @@ def printerSpray():
 		spray_solution = request.values["solution"]
 		# printer.command(";Solution: " + spray_solution)
 		
-	filename = gcodeManager.getAbsolutePath("immediate.gcode", mustExist=False)
+	#filename = gcodeManager.getAbsolutePath("immediate.gcode", mustExist=False)
+	filename = "/home/pi/OctoPrint/octoprint/methods/spray.gcode"
 	printer.command(";" + filename)
 	
 	file = open(filename, "w")
@@ -383,7 +365,7 @@ def printerSpray():
 
 	spray_syringe_x = (sp_x2 - sp_x1) * spray_density / spray_syringe_volume_per_travel * -1
 	spray_syringe_y = spray_distance * spray_density / spray_syringe_volume_per_travel * -1
-	
+	c
 	# this is an intrinsic factor, test
 	spray_feed = spray_speed * 1.0
 	
@@ -443,7 +425,9 @@ def printerSpray():
 			file.write(sc_wait.format(spray_delay))
 
 	# now do the wash
-	file.write(sc_wash)
+	with open("/home/pi/OctoPrint/octoprint/methods/clean.gcode",'rb') as sf_clean:
+		file.write(sf_clean.read())
+
 	file.write(sc_go_home)
 	file.write(sc_motor_off)
 
