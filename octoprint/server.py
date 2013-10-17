@@ -271,7 +271,9 @@ def printerCommand():
 @login_required
 def printerClean():
 	
-	printer.command("G28")
+	printer.command("; cleaning")
+	printer.command("G28 V")
+	printer.command("G28 XYZP")
 	filename = "/home/pi/OctoPrint/octoprint/methods/clean.gcode"
 	#printer.command(";" + filename)
 	printer.selectFile(filename, False, True)
@@ -365,7 +367,7 @@ def printerSpray():
 
 	spray_syringe_x = (sp_x2 - sp_x1) * spray_density / spray_syringe_volume_per_travel * -1
 	spray_syringe_y = spray_distance * spray_density / spray_syringe_volume_per_travel * -1
-	c
+	
 	# this is an intrinsic factor, test
 	spray_feed = spray_speed * 1.0
 	
@@ -385,7 +387,7 @@ def printerSpray():
 		file.write(sc_valve_pos.format(spray_solution))
 		file.write(sc_aspirate.format(spray_syringe_travel + 2))
 		file.write(sc_valve_spray)		
-		file.write(sc_speed.format(0.5) + sc_syringe_position.format(spray_syringe_travel))
+		file.write(sc_speed.format(0.3) + sc_syringe_position.format(spray_syringe_travel))
 		file.write(sc_move_fast_z.format(sp_wash_u))
 
 		#move to start
