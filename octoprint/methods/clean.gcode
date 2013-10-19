@@ -1,5 +1,6 @@
 ; starting cleaning procedure
 ; go to wash position
+M82
 G1 X0.0 Y-110.0 Z-30.0 F200
 G1 Z-50.0
 M106
@@ -20,7 +21,7 @@ G1 P4 F200
 G1 V1 F200
 G4 S1
 ; rinsing spray
-G1 F0.3
+G1 F0.2
 G1 P0
 M106 S0
 G1 V2 F200

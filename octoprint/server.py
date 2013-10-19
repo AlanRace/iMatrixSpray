@@ -377,7 +377,7 @@ def printerSpray():
 	file.write(sc_air_on)
 	# prime spray with spray solution
 	file.write(sc_aspirate.format(2))
-	file.write(sc_valve_spray + sc_speed.format(0.5) + sc_syringe_position.format(0))
+	file.write(sc_valve_spray + sc_speed.format(0.2) + sc_syringe_position.format(0))
 
 	#start loop
 	for n in range(spray_cycles):
@@ -387,7 +387,7 @@ def printerSpray():
 		file.write(sc_valve_pos.format(spray_solution))
 		file.write(sc_aspirate.format(spray_syringe_travel + 2))
 		file.write(sc_valve_spray)		
-		file.write(sc_speed.format(0.3) + sc_syringe_position.format(spray_syringe_travel))
+		file.write(sc_speed.format(0.2) + sc_syringe_position.format(spray_syringe_travel))
 		file.write(sc_move_fast_z.format(sp_wash_u))
 
 		#move to start

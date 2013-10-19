@@ -238,6 +238,7 @@
                     <ul class="nav nav-tabs" id="tabs">
                         <li class="active"><a href="#control" data-toggle="tab">Control</a></li>
                         <li><a href="#term" data-toggle="tab">Terminal</a></li>
+                        <li><a href="#video" data-toggle="tab">Life</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -313,12 +314,7 @@
                             </div>
                         </div>
                         <div class="tab-pane active" id="control">
-                            {% if webcamStream %}
-                            <div id="webcam_container">
-                                <img id="webcam_image" src="{{ webcamStream }}" data-bind="css: { flipH: settings.webcam_flipH(), flipV: settings.webcam_flipV() }">
-                            </div>
-                            {% endif %}
-
+ 
                             <div class="jog-panel" style="display: none;" data-bind="visible: loginState.isUser">
                                 <!-- XY jogging control panel -->
                                 <div class="jog-panel">
@@ -509,6 +505,18 @@
                             </div>
 
                         </div>
+
+
+
+                        <div class="tab-pane" id="video">
+                            {% if webcamStream %}
+                            <div id="webcam_container">
+                                <img id="webcam_image" src="{{ webcamStream }}" data-bind="css: { flipH: settings.webcam_flipH(), flipV: settings.webcam_flipV() }">
+                            </div>
+                            {% endif %}
+                        </div>
+
+
                         <div class="tab-pane" id="term">
                             <pre id="terminal-output" class="pre-scrollable"></pre>
                             <label class="checkbox">
