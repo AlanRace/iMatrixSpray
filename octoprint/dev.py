@@ -38,7 +38,7 @@ if 1:
 	sc_valve_pos = "G1 V{} F200\nG4 S1\n"
 	sc_air_on = "M106\n"
 	sc_air_off = "M106 S0\n"
-	sc_init = "G28\n"
+	sc_init = "G28XYZ\nG28P\n"
 	sc_motor_off = "M18\n"
 
 	# go to wash position
@@ -79,6 +79,7 @@ if 1:
 	# washing tip
 	# a go to wash position
 	sc_wash = "; wash\n"
+	sc_wash += sc_syringe_absolute
 	sc_wash += sc_go_to_wash
 	# spray rest to waste
 	sc_wash += sc_air_on
@@ -96,6 +97,23 @@ if 1:
 	sc_wash += sc_syringe_position.format(1)
 	sc_wash += sc_air_on
 	sc_wash += sc_syringe_position.format(0)
+
+	# priming system
+	sc_prime ="; prime\n" + sc_init
+	sc_prime += sc_syringe_absolute
+	sc_prime += sc_valve_wash + sc_aspirate.format(10) + sc_valve_waste + sc_empty
+	sc_prime += sc_valve_pos.format(3) + sc_aspirate.format(10) + sc_valve_waste + sc_empty
+	sc_prime += sc_valve_pos.format(4) + sc_aspirate.format(10) + sc_valve_waste + sc_empty
+	sc_prime += sc_valve_pos.format(5) + sc_aspirate.format(10) + sc_valve_waste + sc_empty
+	sc_prime += sc_valve_wash + sc_aspirate.format(10) + sc_valve_waste + sc_empty
+
+	# purge system
+	sc_purge ="; purge\n" + sc_init
+	sc_purge += sc_syringe_absolute
+	sc_purge += sc_valve_wash + sc_aspirate.format(10) + sc_valve_waste + sc_empty
+	sc_purge += sc_valve_wash + sc_aspirate.format(10) + sc_valve_waste + sc_empty
+	sc_purge += sc_valve_wash + sc_aspirate.format(10) + sc_valve_waste + sc_empty
+
 
 	# dry spray
 	sc_wash += sc_air_on + "G4 S2\nG4 S2\nG4 S2\nG4 S2\n" + sc_air_off
@@ -183,6 +201,8 @@ if 1:
 	file.write(sc_wash)
 	file.write(sc_go_home)
 	file.write(sc_motor_off)
+	file.write(sc_prime)
+	file.write(sc_purge)
 
 	###################section stop###################
 
