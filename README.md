@@ -1,37 +1,21 @@
-OctoPrint
+iMatrixSpray
 =========
 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=foosel&url=https://github.com/foosel/OctoPrint&title=OctoPrint&language=&tags=github&category=software)
+iMatrixSpray provides a web interface for controlling a [iMatrixSpray](http://www.imatrixspray.org) device running the [deltaSpray](https://github.com/stoeckli/deltaSpray)  firmware. It is based on the [OctoPrint software](https://github.com/foosel/OctoPrint) and is released under the [GNU Affero General Public License V3](http://www.gnu.org/licenses/agpl.html).
 
-OctoPrint provides a responsive web interface for controlling a 3D printer (RepRap, Ultimaker, ...). It is Free Software
-and released under the [GNU Affero General Public License V3](http://www.gnu.org/licenses/agpl.html).
-
-Its website can be found at [octoprint.org](http://octoprint.org).
-
-Reporting bugs
---------------
-
-OctoPrint's issue tracker can be found [on Github](https://github.com/foosel/OctoPrint/issues). **Before opening a new
-ticket please take a look at [this guide on how to file a bug report with OctoPrint](https://github.com/foosel/OctoPrint/wiki/How-to-file-a-bug-report).**
-
-Sending pull requests
----------------------
-
-Please create all pull requests against the [devel branch](https://github.com/foosel/OctoPrint/tree/devel) of OctoPrint, as that one is used for developing new 
-features and then merged against master when those features are deemed mature enough for general consumption. In case
-of bug fixes I'll take care to cherry pick them against master if the bugs they are fixing are critical.
+The octoprint website can be found at [octoprint.org](http://octoprint.org).
 
 Dependencies
 ------------
 
-OctoPrint depends on a couple of python modules to do its job. Those are listed in requirements.txt and can be
+iMatrixSpray depends on a couple of python modules to do its job. Those are listed in requirements.txt and can be
 installed using `pip`:
 
     pip install -r requirements.txt
 
 You should also do this after pulling from the repository, since the dependencies might have changed.
 
-OctoPrint currently only supports Python 2.7.
+iMatrixSpray currently only supports Python 2.7.
 
 Usage
 -----
@@ -49,7 +33,7 @@ to only listen on the local interface on port 8080, the command line would be
 
 Alternatively, the host and port on which to bind can be defined via the configuration.
 
-If you want to run OctoPrint as a daemon (only supported on Linux), use
+If you want to run iMatrixSpray as a daemon (only supported on Linux), use
 
     ./run --daemon {start|stop|restart} [--pid PIDFILE]
 
