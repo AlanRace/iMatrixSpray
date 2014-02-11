@@ -65,7 +65,7 @@ sc_valve_waste = "G1 V0 F200\nG4 S1\n"
 sc_valve_pos = "G1 V{} F200\nG4 S1\n"
 sc_air_on = "M106\n"
 sc_air_off = "M106 S0\n"
-sc_init = "G28\n"
+sc_init = "G28XYZ\nG28P\n"
 sc_motor_off = "M18\n"
 
 # go to wash position
@@ -102,6 +102,8 @@ sc_move_fast_z = "G1 Z{} F200\n"
 sc_spray = "G1 X{} Y{} P{} F{}\n"
 
 sc_go_home = "G1 X0 Y0 Z0 F200\n"
+
+
 
 #~~ Printer state
 
@@ -373,7 +375,20 @@ def printerSpray():
 	
 	#prime system
 	file.write(sc_go_to_wash)
-	file.write(sc_valve_pos.format(spray_solution))
+	#file.write(sc_valve_pos.format(spray_solution))
+	
+	for i in range(0, 5):
+		file.write("G1 V{}.5 F200\n".format(spray_solution))
+		file.write("G4 S1\n")
+		file.write("G1 P2.7 F200\n")
+		file.write("G4 S1\n")
+		file.write("G1 V{} F200\n".format(spray_solution))
+		file.write("G4 S1\n")
+		file.write("G1 V0 F200\n")
+		file.write("G4 S1\n")
+		file.write("G1 P0 F200\n")
+		file.write("G4 S1\n")
+		
 	file.write(sc_air_on)
 	# prime spray with spray solution
 	file.write(sc_aspirate.format(2))
@@ -412,7 +427,7 @@ def printerSpray():
 			y_offset += spray_distance
 
 		#move to wash
-		file.write("G1 Y{} Z{} F200".format(sp_y1, sp_wash_u))
+		file.write("G1 Y{} Z{} F200\n".format(sp_y1, sp_wash_u))
 		file.write(sc_go_to_wash)
 
 		#empty syringe

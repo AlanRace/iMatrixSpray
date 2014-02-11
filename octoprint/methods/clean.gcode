@@ -8,28 +8,73 @@ G1 V0 F200
 G4 S1
 ; emptying syringe
 G1 P0 F200
-G1 V2 F200
+; rinsing valve  steps 5 
+;80 microliter each step
+;step 1
+G1 V1.5 F200
 G4 S1
-G1 P10 F200
+G1 P5.0 F200
+G1 V2 F200
+G4 S2
 G1 V0 F200
 G4 S1
-; rinsing valve
 G1 P0 F200
+;step2
+G1 V1.5 F200
+G4 S1
+G1 P5.0 F200
 G1 V2 F200
+G4 S2
+G1 V0 F200
+G4 S1
+G1 P0 F200
+;step 3
+G1 V1.5 F200
+G4 S1
+G1 P5.0 F200
+G1 V2 F200
+G4 S2
+G1 V0 F200
+G4 S1
+G1 P0 F200
+;step 4
+G1 V1.5 F200
+G4 S1
+G1 P5.0 F200
+G1 V2 F200
+G4 S2
+G1 V0 F200
+G4 S1
+G1 P0 F200
+;step 5
+G1 V1.5 F200
+G4 S1
+G1 P5.0 F200
+G1 V2 F200
+G4 S2
+G1 V0 F200
+G4 S1
+G1 P0 F200
+; rinsing spray
+G1 V1.5 F200
 G4 S1
 G1 P4 F200
+G4 S1
+G1 V2 F200
+G4 S2
 G1 V1 F200
 G4 S1
-; rinsing spray
 G1 F0.2
 G1 P0
 M106 S0
-G1 V2 F200
+; rinsing capillary
+G1 V1.5 F200
 G4 S1
 G1 P3 F200
+G1 V2 F200
+G4 S2
 G1 V1 F200
 G4 S1
-; rinsing capillary
 G1 F0.2
 G1 P0
 G1 P1
