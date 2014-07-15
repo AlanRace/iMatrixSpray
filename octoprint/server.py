@@ -55,7 +55,7 @@ sp_wash_x = 0.0
 sp_wash_y = -110.0
 sp_wash_z = -50.0
 # wash position top, use to approach
-sp_wash_u = -30.0
+sp_wash_u = -35.0
 
 # commands
 sc_valve_wash = "G1 V2 F200\nG4 S1\n"
@@ -69,7 +69,7 @@ sc_init = "G28XYZ\nG28P\n"
 sc_motor_off = "M18\n"
 
 # go to wash position
-sc_go_to_wash = ";go to wash\nG1 X{} Y{} Z{} F200\nG1 Z{}\n".format (sp_wash_x, sp_wash_y, sp_wash_u, sp_wash_z)
+sc_go_to_wash = ";go to wash\nG1 Z{} F200\nG1 X{} Y{} Z{} F200\nG1 Z{}\n".format (sp_wash_u, sp_wash_x, sp_wash_y, sp_wash_u, sp_wash_z)
 
 # aspirate % position
 sc_aspirate = "G1 P{} F200\n"
@@ -101,7 +101,7 @@ sc_move_fast_z = "G1 Z{} F200\n"
 # spray fast % x, y, p, f
 sc_spray = "G1 X{} Y{} P{} F{}\n"
 
-sc_go_home = "G1 X0 Y0 Z0 F200\n"
+sc_go_home = "G1 X0 Y0 Z-35 F200\nG1 Z0 F200\n"
 
 
 
@@ -354,7 +354,7 @@ def printerSpray():
 	file.write(sc_init)
 
 	#syringe parameter in ul/mm
-	spray_syringe_volume_per_travel = 29
+	spray_syringe_volume_per_travel = 16.7
 	
 	#flow contains ul/cm^2
 	#densitity in ul/mm
@@ -380,7 +380,7 @@ def printerSpray():
 	for i in range(0, 5):
 		file.write("G1 V{}.5 F200\n".format(spray_solution))
 		file.write("G4 S1\n")
-		file.write("G1 P2.7 F200\n")
+		file.write("G1 P4.2 F200\n")
 		file.write("G4 S1\n")
 		file.write("G1 V{} F200\n".format(spray_solution))
 		file.write("G4 S1\n")
