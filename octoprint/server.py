@@ -50,7 +50,7 @@ sp_x1 = -60.0
 sp_x2 = 60.0
 sp_y1 = -80.0
 sp_y2 = 80.0
-sp_top = 100.0
+sp_top = 104.0
 sp_wash_x = 0.0
 sp_wash_y = -110.0
 sp_wash_z = -50.0
@@ -386,7 +386,7 @@ def printerSpray():
 		file.write("G4 S1\n")
 		file.write("G1 V0 F200\n")
 		file.write("G4 S1\n")
-		file.write("G1 P0 F200\n")
+		file.write("G1 P0 F100\n")
 		file.write("G4 S1\n")
 		
 	file.write(sc_air_on)
