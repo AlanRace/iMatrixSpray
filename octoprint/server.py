@@ -40,6 +40,7 @@ principals = Principal(app)
 admin_permission = Permission(RoleNeed("admin"))
 user_permission = Permission(RoleNeed("user"))
 
+spray_status = False
 
 # position constants
 sp_home_x = 0.0
@@ -56,6 +57,7 @@ sp_wash_y = -110.0
 sp_wash_z = -50.0
 # wash position top, use to approach
 sp_wash_u = -35.0
+sp_magnet = 16.5
 
 # commands
 sc_valve_wash = "G1 V2 F200\nG4 S1\n"
@@ -65,7 +67,7 @@ sc_valve_waste = "G1 V0 F200\nG4 S1\n"
 sc_valve_pos = "G1 V{} F200\nG4 S1\n"
 sc_air_on = "M106\n"
 sc_air_off = "M106 S0\n"
-sc_init = "G28XYZ\nG28P\n"
+sc_init = "G28XYZ\nG28P\nG90\n"
 sc_motor_off = "M18\n"
 
 # go to wash position
@@ -446,25 +448,33 @@ def printerSpray():
 	with open("/home/pi/OctoPrint/octoprint/methods/clean.gcode",'rb') as sf_clean:
 		file.write(sf_clean.read())
 
-	file.write(sc_go_home)
-	file.write(sc_motor_off)
+	#file.write(sc_go_home)
+	#file.write(sc_motor_off)
 
 	###################section stop###################
 	file.close()
+	global spray_status
+	spray_status = True
 	printer.selectFile(filename, False, True)
-
 	return jsonify(SUCCESS)
 
 @app.route(BASEURL + "control/job", methods=["POST"])
 @login_required
 def printJobControl():
+	global spray_status
 	if "command" in request.values.keys():
 		if request.values["command"] == "start":
+			spray_status = False
 			printer.startPrint()
 		elif request.values["command"] == "pause":
 			printer.togglePausePrint()
 		elif request.values["command"] == "cancel":
-			printer.cancelPrint()
+			printer.cancelPrint(False)
+			if spray_status:
+				printer.selectFile("/home/pi/OctoPrint/octoprint/methods/clean.gcode", False, True)
+				spray_status = False
+	#else:
+	#printer.commands(["G1 Z16.5","M84", "M104 S0", "M140 S0", "M106 S0"])
 	return jsonify(SUCCESS)
 
 @app.route(BASEURL + "control/temperature", methods=["POST"])

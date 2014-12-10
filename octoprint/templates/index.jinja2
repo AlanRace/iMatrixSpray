@@ -125,7 +125,7 @@
                                 </div>
 
                                 <div class="row-fluid print-control" style="display: none;" data-bind="visible: loginState.isUser">
-                                    <button class="btn btn-primary span4" data-bind="click: print, enable: isOperational() && isReady() && !isPrinting() && loginState.isUser(), css: {'btn-danger': isPaused()}" id="job_print"><i class="icon-white" data-bind="css: {'icon-tint': !isPaused(), 'icon-undo': isPaused()}"></i> <span data-bind="text: (isPaused() ? 'Restart' : 'Spray')">Spray</span></button>
+                                    <button class="btn btn-primary span4" data-bind="click: print, enable: isOperational() && isReady() && !isPrinting() && loginState.isUser(), css: {'btn-danger': isPaused()}" id="job_print"><i class="icon-white" data-bind="css: {'icon-tint': !isPaused(), 'icon-undo': isPaused()}"></i> <span data-bind="text: (isPaused() ? 'Restart' : 'Run')">Run</span></button>
                                     <button class="btn span4" id="job_pause" data-bind="click: pause, enable: isOperational() && (isPrinting() || isPaused()) && loginState.isUser(), css: {active: isPaused()}"><i class="icon-pause"></i> <span>Pause</span></button>
                                     <button class="btn span4" id="job_cancel" data-bind="click: cancel, enable: isOperational() && (isPrinting() || isPaused()) && loginState.isUser()"><i class="icon-stop"></i> Cancel</button>
                                 </div>
@@ -220,6 +220,7 @@
                                             <span>Upload</span>
                                             <input id="gcode_upload" type="file" name="gcode_file" class="fileinput-button" data-url="/ajax/gcodefiles/upload" data-bind="enable: loginState.isUser()">
                                         </span>
+
                                         {% endif %}
                                     </div>
                                     <div id="gcode_upload_progress" class="progress" style="width: 100%;">
@@ -321,7 +322,7 @@
 									<h1>Control</h1>
                                     <div style="text-align:left; width:160px;">
 										<div>
-											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'commands',commands:['G28V','G28XYZP']}) }"><i class="icon-home"></i>&nbsp;Init</button>
+											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'commands',commands:['G28V','G28XYZP','G90','G1 Z16.5','M82','M106 S0']}) }"><i class="icon-home"></i>&nbsp;Init</button>
 										</div>
 										<div>
 											<button class="btn control-box" data-bind="enable: isOperational() && !isPrinting() && loginState.isUser(), click: function() { $root.sendCustomCommand({type:'command',command:'M18'}) }"><i class="icon-off"></i>&nbsp;Motors off</button>

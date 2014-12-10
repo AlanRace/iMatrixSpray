@@ -1,6 +1,7 @@
 ; starting cleaning procedure
 ; go to wash position
 M82
+G90
 G1 Z-35.0 F200
 G1 X0.0 Y-110.0 Z-35.0 F200
 G1 Z-50.0
@@ -90,6 +91,6 @@ M106 S0
 ; parking spray
 G1 Z-35.0 F200
 G1 X0 Y0 Z-35 F200
-G1 Z0 F200
+G1 Z16.5 F200
 ; motors off
 M18
